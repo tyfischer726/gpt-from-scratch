@@ -3,7 +3,7 @@ import tokenizer
 import model
 
 # hyper-parameters
-training_loops = 1
+training_loops = 100
 
 # ---------------------------
 
@@ -33,7 +33,7 @@ def get_batch(split='train'):
     x, y = x.to(model.device), y.to(model.device)
     return x, y
 
-print('\nTraining model...')
+print(f'\nTraining model on {model.device}...')
 for i in range(training_loops):
     xb, targets = get_batch()
 

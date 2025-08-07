@@ -10,6 +10,7 @@ context = "\n"
 m = model.TransformerLM()
 m = m.to(model.device)
 m.load_state_dict(torch.load('model_weights.pth', weights_only=True))
+print(f'Model moved to {model.device}.')
 
 context = torch.tensor(tokenizer.encode(context), dtype=torch.long, device=model.device).view(1,-1)
 print('\nModel output:\n--------------\n')
