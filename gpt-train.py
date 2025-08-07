@@ -4,12 +4,15 @@ import tokenizer
 import model
 
 # hyper-parameters
-training_loops = 100
+default_training_loops = 1000
 learning_rate = 0.001
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 output_dir = 'training_outputs'
 
 # ---------------------------
+print('\n-------------------')
+training_loops = input(f'Enter number of training loops (default={default_training_loops}): ')
+training_loops = int(training_loops) if len(training_loops) > 0 else default_training_loops
 
 data = np.load(f'{output_dir}/data.npy')
 data = torch.tensor(data, dtype=torch.long)

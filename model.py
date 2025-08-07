@@ -119,4 +119,4 @@ class TransformerLM(nn.Module):
             probs = F.softmax(logits, dim=-1)
             sample = torch.multinomial(probs, num_samples=1)
             context = torch.cat([context, sample], dim=-1)
-        return context[:, -output_length:]
+        return context

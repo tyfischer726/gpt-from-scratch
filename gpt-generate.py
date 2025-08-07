@@ -21,11 +21,11 @@ while True:
     context = input("\nEnter prompt, or type 'quit': ")
     if context.strip().lower() == 'quit':
         break
-    context = output + ' ' + context
+    context = '\n' if len(context)==0 else context
     context = torch.tensor(tokenizer.encode(context), dtype=torch.long, device=device).view(1,-1)
-    print('\nModel:')
+    print('\nModel:\n----------------------')
     output = tokenizer.decode(m.generate(context, output_length)[0].tolist())
     print(output)
-    print('')
+    print('----------------------')
 
 print('\nDone.')
