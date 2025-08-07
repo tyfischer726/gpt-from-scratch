@@ -4,17 +4,28 @@ import model
 
 # hyper-parameters
 output_length = 300
-context = "\n"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+output_dir = 'training_outputs'
 
 # ---------------------------
+print('\nInitializing model...')
 m = model.TransformerLM()
+print('Loading model weights...')
+m.load_state_dict(torch.load(f'{output_dir}/model_weights.pth', weights_only=True))
 m = m.to(device)
-m.load_state_dict(torch.load('model_weights.pth', weights_only=True))
 print(f'Model moved to {device}.')
 
+output = ''
 m.eval()
-context = torch.tensor(tokenizer.encode(context), dtype=torch.long, device=device).view(1,-1)
-print('\nModel output:\n--------------\n')
-print(tokenizer.decode(m.generate(context, output_length)[0].tolist()))
-print('\n--------------\n')
+while True:
+    context = input("\nEnter prompt, or type 'quit': ")
+    if context.strip().lower() == 'quit':
+        break
+    context = output + ' ' + context
+    context = torch.tensor(tokenizer.encode(context), dtype=torch.long, device=device).view(1,-1)
+    print('\nModel:')
+    output = tokenizer.decode(m.generate(context, output_length)[0].tolist())
+    print(output)
+    print('')
+
+print('\nDone.')

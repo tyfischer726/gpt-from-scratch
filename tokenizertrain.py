@@ -1,3 +1,7 @@
+import os
+
+output_dir = 'training_outputs'
+
 def get_stats(tokens):
     stats = {}
     for pair in zip(tokens, tokens[1:]):
@@ -45,18 +49,21 @@ if __name__ == '__main__':
         vocab[idx] = vocab[pair[0]] + vocab[pair[1]]
     vocab_size = len(vocab)
 
+    if output_dir not in os.listdir():
+        os.mkdir(output_dir)
+
     vocab_out = {}
     for idx in vocab:
         vocab_out[idx] = list(vocab[idx])
-    with open('vocab.json', 'w') as f:
+    with open(f'{output_dir}/vocab.json', 'w') as f:
         json.dump(vocab_out, f, indent=4)
-    print('\nSaved vocab to vocab.json')
+    print(f'\nSaved vocab to {output_dir}/vocab.json')
 
     merges_out = {}
     for pair in merges:
         pair_str = str(pair)
         merges_out[pair_str] = merges[pair]
-    with open('merges.json', 'w') as f:
+    with open(f'{output_dir}/merges.json', 'w') as f:
         json.dump(merges_out, f, indent=4)
-    print('Saved merges to merges.json')
+    print(f'Saved merges to {output_dir}/merges.json')
     print('')

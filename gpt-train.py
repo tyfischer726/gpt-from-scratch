@@ -7,10 +7,11 @@ import model
 training_loops = 100
 learning_rate = 0.001
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+output_dir = 'training_outputs'
 
 # ---------------------------
 
-data = np.load('data.npy')
+data = np.load(f'{output_dir}/data.npy')
 data = torch.tensor(data, dtype=torch.long)
 n = int(0.9*len(data))
 train_data = data[:n]
@@ -48,5 +49,5 @@ for i in range(training_loops):
 m.eval()
 print('Done training.')
 
-torch.save(m.state_dict(), 'model_weights.pth')
+torch.save(m.state_dict(), f'{output_dir}/model_weights.pth')
 print('\nModel weights saved.\n')

@@ -2,9 +2,11 @@ import json
 import ast
 from tokenizertrain import get_stats, merge
 
-with open('merges.json', 'r') as f:
+output_dir = 'training_outputs'
+
+with open(f'{output_dir}/merges.json', 'r') as f:
     merges_json = json.load(f)
-with open('vocab.json', 'r') as f:
+with open(f'{output_dir}/vocab.json', 'r') as f:
     vocab_json = json.load(f)
 
 merges = {}
