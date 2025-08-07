@@ -7,12 +7,10 @@ import tokenizer
 vocab_size = len(tokenizer.vocab)
 block_size = 16
 batch_size = 32
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-learning_rate = 0.001
 n_emb = 64
 n_heads = 4
 dropout = 0.2
-n_blocks = 1
+n_blocks = 4
 
 # ---------------------------
 
@@ -60,9 +58,15 @@ class FeedForward(nn.Module):
 
     def __init__(self):
         super().__init__()
+        self.layers = nn.Sequential(nn.Linear(n_emb, n_emb*4),
+                                    nn.ReLU(),
+                                    nn.Linear(n_emb*4, n_emb),
+                                    nn.Dropout(dropout)
+                                    )
 
     def forward(self, emb):
-        return emb
+        d_emb = self.layers(emb)
+        return d_emb
     
 class Block(nn.Module):
 
