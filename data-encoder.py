@@ -15,7 +15,7 @@ if output_dir not in os.listdir():
 data = np.array(data)
 np.save(f'{output_dir}/data.npy', data)
 
-print(f'len text:\t\t{len(text)}')
-print(f'len data:\t\t{len(data)}')
+print(f'len original text:\t{len(text)}')
+print(f'len encoded data:\t{len(data)}')
 
 print('\nDone.\n')
