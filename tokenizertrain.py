@@ -22,7 +22,6 @@ def merge(tokens, pair, idx):
 
 if __name__ == '__main__':
     import json
-
     with open('datasets/taylorswift.txt', 'r', encoding='utf-8') as f:
         tok_text = f.read()
 
@@ -47,7 +46,6 @@ if __name__ == '__main__':
     for pair in merges:
         idx = merges[pair]
         vocab[idx] = vocab[pair[0]] + vocab[pair[1]]
-    vocab_size = len(vocab)
 
     if output_dir not in os.listdir():
         os.mkdir(output_dir)
