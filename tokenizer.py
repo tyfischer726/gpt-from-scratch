@@ -1,46 +1,22 @@
-with open('datasets/taylorswift.txt', 'r', encoding='utf-8') as f:
-    tok_text = f.read()
+import json
+import ast
+from tokenizertrain import get_stats, merge
 
-utf8_tokens = list(tok_text.encode('utf-8'))
+with open('merges.json', 'r') as f:
+    merges_json = json.load(f)
+with open('vocab.json', 'r') as f:
+    vocab_json = json.load(f)
 
-def get_stats(tokens):
-    stats = {}
-    for pair in zip(tokens, tokens[1:]):
-        stats[pair] = stats.get(pair, 0) + 1
-    return stats
-
-def merge(tokens, pair, idx):
-    new_tokens = []
-    i = 0
-    while i < len(tokens):
-        if (i < len(tokens)-1) and (tokens[i]==pair[0] and tokens[i+1]==pair[1]):
-            new_tokens.append(idx)
-            i += 2
-        else:
-            new_tokens.append(tokens[i])
-            i += 1
-    return new_tokens
-
-num_merges = 100
-tokens = list(utf8_tokens)
 merges = {}
-print('\nMerging tokenizer data...')
-for i in range(num_merges):
-    stats = get_stats(tokens)
-    pair = max(stats, key=stats.get)
-    if stats[pair] == 1:
-        break
-    idx = 256 + i
-    tokens = merge(tokens, pair, idx)
-    merges[pair] = idx
-    # print(f'merged\t{pair}\tinto\t{idx}')
-print(f'Done merging.')
+for key_json in merges_json:
+    key = ast.literal_eval(key_json)
+    merges[key] = merges_json[key_json]
 
-vocab = {idx : bytes([idx]) for idx in range(256)}
-for pair in merges:
-    idx = merges[pair]
-    vocab[idx] = vocab[pair[0]] + vocab[pair[1]]
-vocab_size = len(vocab)
+vocab = {}
+for key_json, value_json in vocab_json.items():
+    key = ast.literal_eval(key_json)
+    value = b''.join([bytes([i]) for i in value_json])
+    vocab[key] = value
 
 def encode(text):
     tokens = list(text.encode('utf-8'))
@@ -58,13 +34,14 @@ def decode(tokens):
     text = text.decode('utf-8', errors='replace')
     return text
 
-print('\nVerifying tokenizer:')
-test = "Hello, world."
-print(f'test:\t\t{test}')
-print(f"utf8:\t\t{list(test.encode('utf-8'))}")
+if __name__ == "__main__":
+    print('\nVerifying tokenizer:')
+    test = "Hello, world."
+    print(f'test:\t\t{test}')
+    print(f"utf8:\t\t{list(test.encode('utf-8'))}")
 
-test = encode(test)
-print(f'encoded:\t{test}')
+    test = encode(test)
+    print(f'encoded:\t{test}')
 
-test = decode(test)
-print(f'decoded:\t{test}')
+    test = decode(test)
+    print(f'decoded:\t{test}\n')
