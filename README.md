@@ -1,6 +1,6 @@
 # gpt-from-scratch
 
-Uses Python 3.12.10
+Run in a virtual environment using Python 3.12.10.
 
 Run files in following order:
 1. tokenizertrain.py
